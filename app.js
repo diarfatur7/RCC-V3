@@ -135,3 +135,22 @@ $("rejectForm").onsubmit=async e=>{e.preventDefault();let {data,error}=await db.
 /* QR AUTO OPEN */
 async function openBoxFromUrl(){let p=new URLSearchParams(location.search).get("box");if(!p)return;show("box");if(/^\d+$/.test(p)){let {data}=await db.rpc("rcc_box_list",{p_search:""});let b=(data||[]).find(x=>String(x.box_id)===String(p));if(b){viewBox(b.box_id,b.nomor_box);return}}$("boxQ").value=p;searchBox()}
 openBoxFromUrl();loadStats();
+
+
+/* PREMIUM THEME */
+(function(){
+  const themeBtn = document.getElementById("themeToggle");
+  if(!themeBtn) return;
+  const saved = localStorage.getItem("rcc_theme");
+  if(saved === "dark") document.body.classList.add("dark");
+  function sync(){
+    const dark = document.body.classList.contains("dark");
+    themeBtn.innerHTML = dark ? "☀ <span>Light Mode</span>" : "☾ <span>Dark Mode</span>";
+  }
+  themeBtn.addEventListener("click", function(){
+    document.body.classList.toggle("dark");
+    localStorage.setItem("rcc_theme", document.body.classList.contains("dark") ? "dark" : "light");
+    sync();
+  });
+  sync();
+})();
