@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RCC V2</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">R</div><div><b>RCC V2</b><small>Record Control Center</small></div></div>
+    <nav>
+      <button class="nav active" data-page="dashboard">⌂ <span>Dashboard</span></button>
+      <button class="nav" data-page="search">⌕ <span>Search</span></button>
+      <button class="nav" data-page="dokumen">▣ <span>Dokumen</span></button>
+      <button class="nav" data-page="visual">▦ <span>Visual Center</span></button>
+      <button class="nav" data-page="box">▦ <span>Box</span></button>
+      <button class="nav" data-page="request">☷ <span>Request</span></button>
+      <button class="nav" data-page="reject">× <span>Reject</span></button>
+    </nav>
+    <div class="side-foot">Supabase PostgreSQL<br><span>RCC V2</span></div>
+  </aside>
+
+  <section class="content">
+    <header class="topbar">
+      <button id="menu" class="mobile-menu">☰</button>
+      <div><div id="pageKicker">RECORD CONTROL CENTER</div><h1 id="pageTitle">Dashboard</h1></div>
+      <div class="online"><i></i> ONLINE</div>
+    </header>
+
+    <main>
+      <section id="dashboard" class="page active-page">
+        <div class="welcome"><div><h2>Selamat datang di RCC V2</h2><p>Pusat kontrol dokumen yang lebih cepat dan terstruktur.</p></div><button class="primary" data-goto="search">🔎 Cari Dokumen</button></div>
+        <div class="stats">
+          <div class="stat"><span>Total Dokumen</span><b id="sTotal">—</b></div>
+          <div class="stat"><span>Sudah Ada Box</span><b id="sLinked">—</b></div>
+          <div class="stat"><span>Belum Ada Box</span><b id="sUnlinked">—</b></div>
+          <div class="stat"><span>Total Box</span><b id="sBox">—</b></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h3>Quick Access</h3></div><div class="quick">
+          <button data-goto="search">🔎<b>Search Dokumen</b><small>Cari PV, vendor, box, kode</small></button>
+          <button data-goto="dokumen">＋<b>Tambah Dokumen</b><small>Input satu dokumen</small></button>
+          <button data-goto="box">📦<b>Manajemen Box</b><small>Lihat dan kelola box</small></button>
+        </div></div>
+      </section>
+
+      <section id="search" class="page">
+        <div class="section-head"><div><h2>Search Dokumen</h2><p>Cari PV, vendor, nomor box, kode, rak, atau lemari.</p></div></div>
+        <div class="searchbar"><input id="q" placeholder="Contoh: 34000045130 / INTAN MUSTIKA / 414"><button id="go" class="primary">Cari</button></div>
+        <div id="searchResults"></div>
+      </section>
+
+      <section id="dokumen" class="page">
+        <div class="section-head">
+          <div><h2>Dokumen</h2><p>Kelola dokumen RCC.</p></div>
+          <div class="header-actions">
+            <button class="primary" id="addDocBtn">＋ Tambah Dokumen</button>
+            <button class="secondary" id="csvBtn">⇧ Import CSV</button>
+            <button class="secondary" id="pasteBtn">📋 Bulk Paste</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="doc-help"><b>Import CSV:</b> <code>nomor_pv,nama_vendor,tahun,kode,nomor_box</code><br>
+          <b>Bulk Paste:</b> Nomor PV → Nama Vendor → Tahun → Kode → Nomor Box.</div>
+        </div>
+      </section>
+
+      <section id="visual" class="page">
+        <div class="section-head"><div><h2>Visual Record Center</h2><p>Lihat Lemari → Rak → Box secara visual.</p></div><button class="secondary" id="refreshVisual">↻ Refresh</button></div>
+        <div class="visual-summary" id="visualSummary"></div>
+        <div class="visual-toolbar"><input id="visualSearch" placeholder="Cari Lemari, Rak, atau Box..."><select id="visualStatus"><option value="">Semua Status</option><option value="TERISI">Terisi</option><option value="KOSONG">Kosong</option></select></div>
+        <div id="cabinetGrid" class="cabinet-grid"></div><div id="cabinetDetail" class="cabinet-detail"></div>
+      </section>
+
+      <section id="box" class="page">
+        <div class="section-head"><div><h2>Manajemen Box</h2><p>Cari Box dan lihat seluruh dokumen di dalamnya.</p></div><button class="primary" id="addBoxBtn">＋ Tambah Box</button></div>
+        <div class="searchbar"><input id="boxQ" placeholder="Cari nomor Box, Rak, atau Lemari"><button id="boxGo" class="primary">Cari Box</button></div>
+        <div id="boxResults"></div>
+      </section>
+
+      <section id="pvdetail" class="page">
+        <div class="section-head"><div><h2>Detail PV</h2><p>Seluruh record dan lokasi fisik PV.</p></div><button class="secondary" id="backPv">← Kembali</button></div>
+        <div id="pvDetailResults"></div>
+      </section>
+
+      <section id="request" class="page">
+        <div class="section-head"><div><h2>Request Dokumen</h2><p>Monitoring dan input request dokumen.</p></div><button class="primary" id="addRequestBtn">＋ Request Baru</button></div>
+        <div class="searchbar"><input id="requestSearch" placeholder="Cari PV, vendor, atau user"><button id="requestGo" class="primary">Cari</button></div>
+        <div id="requestResults"></div>
+      </section>
+
+      <section id="reject" class="page">
+        <div class="section-head"><div><h2>Reject</h2><p>Monitoring dokumen yang ditolak.</p></div><button class="primary" id="addRejectBtn">＋ Reject Baru</button></div>
+        <div class="searchbar"><input id="rejectSearch" placeholder="Cari PV, vendor, reviewer, alasan"><button id="rejectGo" class="primary">Cari</button></div>
+        <div id="rejectResults"></div>
+      </section>
+    </main>
+  </section>
+</div>
+
+<div id="docModal" class="modal">
+ <div class="modal-card"><div class="modal-head"><div><h2>Tambah Dokumen</h2><p>Masukkan data PV baru.</p></div><button id="closeModal" class="close">×</button></div>
+ <form id="docForm">
+  <label>Nomor PV<input id="fPv" required></label><label>Nama Vendor<input id="fVendor" required></label>
+  <div class="form-row"><label>Tahun<input id="fYear" type="number" required></label><label>Kode<input id="fKode"></label></div>
+  <label>Nomor Box<select id="fBox"><option value="">— Belum terhubung —</option></select></label>
+  <div id="duplicateBox" class="warning"></div><div class="form-actions"><button type="button" id="cancelDoc" class="secondary">Batal</button><button class="primary">Simpan</button></div>
+ </form></div>
+</div>
+
+<div id="csvModal" class="modal">
+ <div class="modal-card wide"><div class="modal-head"><div><h2>Import CSV</h2><p>Masukkan banyak dokumen sekaligus.</p></div><button id="closeCsv" class="close">×</button></div>
+ <div class="csv-help"><b>Header:</b> <code>nomor_pv,nama_vendor,tahun,kode,nomor_box</code><br>Nomor Box boleh kosong.</div>
+ <input id="csvFile" type="file" accept=".csv,text/csv"><div id="csvPreview" class="csv-preview"></div><div id="csvProgress" class="progress"></div>
+ <div class="form-actions"><button id="cancelCsv" type="button" class="secondary">Batal</button><button id="startCsv" type="button" class="primary" disabled>Import CSV</button></div></div>
+</div>
+
+<div id="pasteModal" class="modal">
+ <div class="modal-card wide"><div class="modal-head"><div><h2>Bulk Paste</h2><p>Copy dari Excel/Google Sheets lalu paste.</p></div><button id="closePaste" class="close">×</button></div>
+ <div class="csv-help"><b>Urutan:</b> Nomor PV → Nama Vendor → Tahun → Kode → Nomor Box. TAB otomatis dibaca.</div>
+ <textarea id="pasteArea" class="paste-area" placeholder="Paste data dari Excel di sini..."></textarea><div id="pastePreview" class="csv-preview"></div><div id="pasteProgress" class="progress"></div>
+ <div class="form-actions"><button id="cancelPaste" type="button" class="secondary">Batal</button><button id="checkPaste" type="button" class="secondary" disabled>Cek Data</button><button id="importPaste" type="button" class="primary" disabled>Import Data</button></div></div>
+</div>
+
+<div id="boxModal" class="modal"><div class="modal-card"><div class="modal-head"><div><h2>Tambah Box</h2><p>Daftarkan lokasi Box baru.</p></div><button id="closeBox" class="close">×</button></div>
+<form id="boxForm"><label>Nomor Box<input id="bNomor" required></label><div class="form-row"><label>Roll O Pack<input id="bRoll"></label><label>Status<select id="bStatus"><option>TERSEDIA</option><option>TERISI</option><option>KOSONG</option></select></label></div><div class="form-row"><label>Rak<input id="bRak"></label><label>Lemari<input id="bLemari"></label></div><div id="boxMsg" class="warning"></div><div class="form-actions"><button type="button" id="cancelBox" class="secondary">Batal</button><button class="primary">Simpan Box</button></div></form></div></div>
+
+<div id="requestModal" class="modal"><div class="modal-card"><div class="modal-head"><div><h2>Request Dokumen</h2></div><button id="closeRequest" class="close">×</button></div>
+<form id="requestForm"><label>User / Nama<input id="rUser" required></label><label>Payment Voucher<input id="rPv" required></label><div class="form-row"><label>Kode<input id="rKode"></label><label>Vendor<input id="rVendor"></label></div><label>Catatan<textarea id="rNotes"></textarea></label><div class="form-actions"><button type="button" id="cancelRequest" class="secondary">Batal</button><button class="primary">Simpan Request</button></div></form></div></div>
+
+<div id="rejectModal" class="modal"><div class="modal-card"><div class="modal-head"><div><h2>Reject Dokumen</h2></div><button id="closeReject" class="close">×</button></div>
+<form id="rejectForm"><label>Tanggal<input id="jDate" type="date" required></label><label>Nomor PV (boleh kosong)<input id="jPv"></label><label>Nama Vendor<input id="jVendor"></label><label>User / Reviewer<input id="jUser" required></label><label>Alasan Reject<textarea id="jReason" required></textarea></label><div class="form-actions"><button type="button" id="cancelReject" class="secondary">Batal</button><button class="primary">Simpan Reject</button></div></form></div></div>
+
+<div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
