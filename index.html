@@ -26,12 +26,20 @@
     <header class="topbar">
       <button id="menu" class="mobile-menu">☰</button>
       <div><div id="pageKicker">RECORD CONTROL CENTER</div><h1 id="pageTitle">Dashboard</h1></div>
-      <div class="online"><i></i> ONLINE</div>
+      <div class="top-actions">
+        <div class="online"><i></i> ONLINE</div>
+        <button id="themeToggle" class="theme-toggle" type="button" title="Ganti tema">☾ <span>Dark Mode</span></button>
+      </div>
     </header>
 
     <main>
       <section id="dashboard" class="page active-page">
         <div class="welcome"><div><h2>Selamat datang di RCC V2</h2><p>Pusat kontrol dokumen yang lebih cepat dan terstruktur.</p></div><button class="primary" data-goto="search">🔎 Cari Dokumen</button></div>
+        <div class="status-strip">
+          <div><span class="status-dot"></span><b>RCC Online</b><small>Database tersambung</small></div>
+          <div><span>⚡</span><b>Realtime Ready</b><small>Siap untuk pencarian & monitoring</small></div>
+          <div><span>🗄️</span><b>Record Center</b><small>Kontrol box dan dokumen terpusat</small></div>
+        </div>
         <div class="stats">
           <div class="stat"><span>Total Dokumen</span><b id="sTotal">—</b></div>
           <div class="stat"><span>Sudah Ada Box</span><b id="sLinked">—</b></div>
